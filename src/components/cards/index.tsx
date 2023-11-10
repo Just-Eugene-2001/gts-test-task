@@ -5,10 +5,11 @@ import { Event } from "../../types"
 interface CardsProps {
   eventsList: Event[];
   filters: number[];
+  showAll: boolean;
   setRead: (index: number) => void;
 }
 
-function Cards({eventsList, filters, setRead}: CardsProps) {
+function Cards({eventsList, filters, showAll, setRead}: CardsProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const handleSpace = useCallback((e: KeyboardEvent) => {
@@ -23,6 +24,8 @@ function Cards({eventsList, filters, setRead}: CardsProps) {
     return () => document.removeEventListener("keydown", handleSpace);
   }, [handleSpace]);
 
+
+  
   const gridItem = (event: Event) => {
     return (
       <div className="col-12 lg:col-6 xl:col-4 p-2">
@@ -63,7 +66,11 @@ function Cards({eventsList, filters, setRead}: CardsProps) {
   return (
     <div className="cards">
       <DataView
-        value={filters.length ? filters?.map(index => eventsList[index]) : eventsList}
+        value={
+          showAll ?
+          eventsList :
+          filters.length ? filters?.map(index => eventsList[index]) : []
+        }
         itemTemplate={gridItem}
         layout={"grid"}
         paginator

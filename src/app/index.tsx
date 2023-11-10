@@ -16,6 +16,7 @@ function App() {
   const [view, setView] = useState<"tables" | "cards">("tables");
   const [messageFilterValue, setMessageFilterValue] = useState<string>('');
   const [idOfFilteredEvents, setIdOfFilteredEvents] = useState<number[]>([]);
+  const [showAll, setShowAll] = useState<boolean>(true);
 
   const select = useSelector((state: RootState) => ({
     eventsList: state.events.eventsList
@@ -43,7 +44,7 @@ function App() {
   };
 
   const onMessageFilter = () => {
-    const value = messageFilterValue;
+    const value = messageFilterValue.trimStart();
     let _filters = { ...filters };
     // @ts-ignore
     _filters['message'].value = value;
@@ -57,6 +58,13 @@ function App() {
         }
         return false;
     })
+
+    if (!value) {
+      setShowAll(true);
+      setIdOfFilteredEvents([]);
+      return;
+    }
+    setShowAll(false);
 
     if (value) {
       setIdOfFilteredEvents(result.map(function(inner) { return inner.id }));
@@ -86,7 +94,7 @@ function App() {
       <div className="mt-2">
         {view === "tables" ?
           <Table eventsList={select.eventsList} filters={filters} setRead={callbacks.setRead}/> :
-          <Cards eventsList={select.eventsList} filters={idOfFilteredEvents} setRead={callbacks.setRead}/>
+          <Cards eventsList={select.eventsList} filters={idOfFilteredEvents} showAll={showAll} setRead={callbacks.setRead}/>
         }
       </div>
     </div>
