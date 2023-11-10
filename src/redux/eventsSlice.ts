@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { EventsState, NewEvent } from '../types';
 
 
@@ -23,7 +22,7 @@ const certificatesSlice = createSlice({
           id: state.eventsList.length
         }];
     },
-    setRead(state, action: PayloadAction<any>) {
+    setRead(state, action: PayloadAction<number>) {
       state.eventsList[action.payload].read = true;
     }
   }
